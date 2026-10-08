@@ -4,12 +4,22 @@ import {
   CheckCircle,
   XCircle,
   Image,
+  AlertCircle,
 } from "lucide-react";
+import GemmaExplanation from "../components/GemmaExplanation";
 import { getApiErrorMessage } from "../utils/api";
 import { buildExplanation, getConfidenceBreakdown } from "../utils/confidence";
 import logo from "../assets/logo.png";
 
-type Verdict = "REAL" | "FAKE" | null;
+type Verdict = "REAL" | "FAKE" | "INCONCLUSIVE" | null;
+
+interface GemmaExplanationData {
+  status: "ready" | "error";
+  mode: "fallback" | "supplementary";
+  model?: string;
+  explanation?: string;
+  message?: string;
+}
 
 interface ResultDetails {
   aiGenerated?: { verdict: string; score: number };
@@ -22,6 +32,7 @@ interface ResultData {
   confidence: number;
   reasoning: string;
   details?: ResultDetails;
+  gemmaExplanation?: GemmaExplanationData;
 }
 
 export default function ImageDetection() {
@@ -35,6 +46,8 @@ export default function ImageDetection() {
   const [reasoning, setReasoning] = useState("");
   const [explanation, setExplanation] = useState("");
   const [details, setDetails] = useState<ResultDetails | null>(null);
+  const [gemmaExplanation, setGemmaExplanation] =
+    useState<GemmaExplanationData | undefined>();
   const fileRef = useRef<HTMLInputElement>(null);
 
   const handleDrop = (e: React.DragEvent) => {
@@ -50,6 +63,7 @@ export default function ImageDetection() {
     setVerdict(null);
     setReasoning("");
     setDetails(null);
+    setGemmaExplanation(undefined);
     setStatusMessage("");
 
     const formData = new FormData();
@@ -87,6 +101,7 @@ export default function ImageDetection() {
             setReasoning(data.reasoning);
             setDetails(data.details ?? null);
             setExplanation(buildExplanation(data.verdict, data.reasoning, data.details));
+            setGemmaExplanation(data.gemmaExplanation);
           } else if (obj.type === "error") {
             throw new Error(obj.message);
           }
@@ -109,6 +124,7 @@ export default function ImageDetection() {
     setReasoning("");
     setExplanation("");
     setDetails(null);
+    setGemmaExplanation(undefined);
     setStatusMessage("");
   };
 
@@ -198,20 +214,28 @@ export default function ImageDetection() {
             </div>
           ) : (
             <div className="rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
-              <div className={`px-8 py-5 flex items-center justify-between ${verdict === "REAL" ? "bg-green-50" : "bg-red-50"}`}>
+              <div className={`px-8 py-5 flex items-center justify-between ${verdict === "REAL" ? "bg-green-50" : verdict === "FAKE" ? "bg-red-50" : "bg-amber-50"}`}>
                 <div className="flex items-center gap-3">
-                  {verdict === "REAL" ? <CheckCircle size={32} className="text-green-600" /> : <XCircle size={32} className="text-red-600" />}
+                  {verdict === "REAL" ? <CheckCircle size={32} className="text-green-600" /> : verdict === "FAKE" ? <XCircle size={32} className="text-red-600" /> : <AlertCircle size={32} className="text-amber-600" />}
                   <div>
-                    <p className={`text-2xl font-bold ${verdict === "REAL" ? "text-green-700" : "text-red-700"}`}>
-                      {verdict === "REAL" ? "REAL" : "FAKE"}
+                    <p className={`text-2xl font-bold ${verdict === "REAL" ? "text-green-700" : verdict === "FAKE" ? "text-red-700" : "text-amber-700"}`}>
+                      {verdict}
                     </p>
                     <p className="text-sm text-gray-500">
-                      {verdict === "REAL" ? "No signs of AI manipulation detected." : "AI/Deepfake manipulation detected."}
+                      {verdict === "REAL"
+                        ? "No signs of AI manipulation detected."
+                        : verdict === "FAKE"
+                          ? "AI/Deepfake manipulation detected."
+                          : "No dedicated forensic detector is configured. Gemma 4 cannot verify authenticity."}
                     </p>
                   </div>
                 </div>
-                <div className={`px-4 py-2 rounded-full font-bold text-sm ${verdict === "REAL" ? "bg-green-600 text-white" : "bg-red-600 text-white"}`}>
-                  {verdict === "REAL" ? `${realConfidence}% real confidence` : `${fakeConfidence}% fake confidence`}
+                <div className={`px-4 py-2 rounded-full font-bold text-sm ${verdict === "REAL" ? "bg-green-600 text-white" : verdict === "FAKE" ? "bg-red-600 text-white" : "bg-amber-600 text-white"}`}>
+                  {verdict === "REAL"
+                    ? `${realConfidence}% real confidence`
+                    : verdict === "FAKE"
+                      ? `${fakeConfidence}% fake confidence`
+                      : "No forensic verdict"}
                 </div>
               </div>
 
@@ -232,6 +256,8 @@ export default function ImageDetection() {
                   <p className="text-sm text-gray-700 leading-6">{explanation || reasoning}</p>
                 </div>
               </div>
+
+              <GemmaExplanation result={gemmaExplanation} />
 
               {details && (
                 <div className="px-8 py-4 bg-white border-t border-gray-100 grid grid-cols-2 gap-4">

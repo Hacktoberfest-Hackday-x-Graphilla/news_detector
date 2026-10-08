@@ -5,6 +5,7 @@ import {
   XCircle,
   Video,
 } from "lucide-react";
+import GemmaExplanation from "../components/GemmaExplanation";
 import { getApiErrorMessage } from "../utils/api";
 import { buildExplanation, getConfidenceBreakdown } from "../utils/confidence";
 import logo from "../assets/logo.png";
@@ -24,6 +25,13 @@ interface ResultData {
   reasoning: string;
   details?: ResultDetails;
   frameCount?: number;
+  gemmaExplanation?: {
+    status: "ready" | "error";
+    mode: "fallback" | "supplementary";
+    model?: string;
+    explanation?: string;
+    message?: string;
+  };
 }
 
 export default function VideoDetection() {
@@ -37,6 +45,8 @@ export default function VideoDetection() {
   const [reasoning, setReasoning] = useState("");
   const [explanation, setExplanation] = useState("");
   const [details, setDetails] = useState<ResultDetails | null>(null);
+  const [gemmaExplanation, setGemmaExplanation] =
+    useState<ResultData["gemmaExplanation"]>();
   const [frameCount, setFrameCount] = useState<number | undefined>(undefined);
   const fileRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -55,6 +65,7 @@ export default function VideoDetection() {
     setVerdict(null);
     setReasoning("");
     setDetails(null);
+    setGemmaExplanation(undefined);
     setFrameCount(undefined);
     setStatusMessage("");
 
@@ -92,6 +103,7 @@ export default function VideoDetection() {
             setFakeConfidence(breakdown.fakeConfidence);
             setReasoning(data.reasoning);
             setDetails(data.details ?? null);
+            setGemmaExplanation(data.gemmaExplanation);
             setExplanation(buildExplanation(data.verdict, data.reasoning, data.details));
             setFrameCount(data.frameCount);
           } else if (obj.type === "error") {
@@ -116,6 +128,7 @@ export default function VideoDetection() {
     setReasoning("");
     setExplanation("");
     setDetails(null);
+    setGemmaExplanation(undefined);
     setFrameCount(undefined);
     setStatusMessage("");
   };
@@ -241,6 +254,8 @@ export default function VideoDetection() {
                   <p className="text-sm text-gray-700 leading-6">{explanation || reasoning}</p>
                 </div>
               </div>
+
+              <GemmaExplanation result={gemmaExplanation} />
 
               {details && (
                 <div className="px-8 py-4 bg-white border-t border-gray-100 grid grid-cols-2 gap-4">

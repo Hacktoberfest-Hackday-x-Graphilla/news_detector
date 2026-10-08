@@ -2,6 +2,7 @@ import { analyze } from "../services/orchestrator.js";
 import { inferType as sightInferType } from "../services/sightEngineService.js";
 import { inferType as hiveInferType } from "../services/hiveService.js";
 import { removeFile } from "../utils/fileUtils.js";
+import config from "../config/index.js";
 
 function ndjson(res, obj) {
   res.write(JSON.stringify(obj) + "\n");
@@ -10,11 +11,6 @@ function ndjson(res, obj) {
 function inferType(filename) {
   return sightInferType(filename) || hiveInferType(filename);
 }
-
-const SERVICE_NAMES = {
-  image: "SightEngine",
-  video: "Hive AI",
-};
 
 export async function detect(req, res, next) {
   try {
@@ -38,7 +34,20 @@ export async function detect(req, res, next) {
       return res.status(400).json({ error: "Unsupported file type. Supported: images (JPG, PNG, WebP, GIF) and videos (MP4, WebM, AVI, MKV, WMV, MOV)" });
     }
 
-    const serviceName = SERVICE_NAMES[mediaType] || "Analysis";
+    const hasSightEngineCredentials =
+      Boolean(config.sightEngine.apiUser) &&
+      Boolean(config.sightEngine.apiSecret);
+    const hasHiveCredentials = Boolean(config.hive.apiKey);
+    const serviceName =
+      mediaType === "video"
+        ? hasHiveCredentials
+          ? "Hive AI with an optional local Gemma 4 explanation"
+          : "video analysis (Hive API key required)"
+        : hasSightEngineCredentials
+          ? "SightEngine with an optional local Gemma 4 explanation"
+          : hasHiveCredentials
+            ? "Hive AI with an optional local Gemma 4 explanation"
+            : "local Gemma 4 visual description only (no forensic detector configured)";
 
     res.setHeader("Content-Type", "application/x-ndjson");
 

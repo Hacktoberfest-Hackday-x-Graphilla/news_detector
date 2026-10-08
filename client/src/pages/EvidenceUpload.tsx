@@ -14,6 +14,7 @@ import {
   Download,
   Save,
 } from "lucide-react";
+import GemmaExplanation from "../components/GemmaExplanation";
 import { getApiErrorMessage } from "../utils/api";
 import { buildExplanation, getConfidenceBreakdown } from "../utils/confidence";
 
@@ -68,6 +69,13 @@ export default function EvidenceAnalysis() {
   const [realConfidence, setRealConfidence] = useState(0);
   const [fakeConfidence, setFakeConfidence] = useState(0);
   const [explanation, setExplanation] = useState("");
+  const [gemmaExplanation, setGemmaExplanation] = useState<{
+    status: "ready" | "error";
+    mode: "fallback" | "supplementary";
+    model?: string;
+    explanation?: string;
+    message?: string;
+  }>();
   const [hash, setHash] = useState("");
 
   const fileRef = (node: HTMLInputElement | null) => { if (node) node.value = ""; };
@@ -86,6 +94,7 @@ export default function EvidenceAnalysis() {
     setRealConfidence(0);
     setFakeConfidence(0);
     setExplanation("");
+    setGemmaExplanation(undefined);
     setHash("");
 
     const formData = new FormData();
@@ -122,10 +131,11 @@ export default function EvidenceAnalysis() {
             // optional: setStatusMessage(obj.message)
           } else if (obj.type === "result") {
             setVerdict(obj.data.verdict);
-            const breakdown = getConfidenceBreakdown(obj.data.confidence);
+            const breakdown = getConfidenceBreakdown(obj.data.confidence, obj.data.verdict);
             setRealConfidence(breakdown.realConfidence);
             setFakeConfidence(breakdown.fakeConfidence);
             setExplanation(buildExplanation(obj.data.verdict, obj.data.reasoning, obj.data.details));
+            setGemmaExplanation(obj.data.gemmaExplanation);
             if (obj.data.details?.aiGenerated || obj.data.details?.deepfake) {
               setHash(obj.data.details.aiGenerated?.verdict + obj.data.details.deepfake?.verdict);
             } else {
@@ -398,6 +408,8 @@ export default function EvidenceAnalysis() {
                   <p className="text-sm text-gray-700 leading-6">{explanation || "The model did not return a detailed explanation."}</p>
                 </div>
               </div>
+
+              <GemmaExplanation result={gemmaExplanation} />
 
               <div className="px-8 py-4 bg-white border-t border-gray-100 flex items-start gap-3">
                 <Hash size={16} className="text-gray-400 mt-0.5 shrink-0" />

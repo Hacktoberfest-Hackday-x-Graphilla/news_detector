@@ -44,4 +44,8 @@ export default {
   hive: {
     apiKey: process.env.HIVE_API_KEY || "",
   },
+  gemma: {
+    baseUrl: process.env.OLLAMA_BASE_URL || "http://127.0.0.1:11434",
+    model: process.env.OLLAMA_GEMMA_MODEL || "gemma4:e2b",
+  },
 };

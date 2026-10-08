@@ -135,11 +135,19 @@ async function analyzeImage(imageBase64, filename) {
 }
 
 function normalizeServerResult(result) {
-  const confidence = Number(result.confidence ?? 0);
-  const deepfakeScore = Math.max(0, Math.min(1, confidence / 100));
+  const rawConfidence = Number(result.confidence ?? 0);
+  const confidence = Number.isFinite(rawConfidence)
+    ? Math.max(0, Math.min(100, rawConfidence))
+    : 0;
   const verdict = String(result.verdict || 'UNKNOWN').toUpperCase();
-  const manipulationConfidence = confidence;
-  const authenticityConfidence = Math.max(0, 100 - confidence);
+  const manipulationConfidence =
+    verdict === 'FAKE'
+      ? confidence
+      : verdict === 'REAL'
+        ? 100 - confidence
+        : 50;
+  const authenticityConfidence = 100 - manipulationConfidence;
+  const deepfakeScore = manipulationConfidence / 100;
 
   return {
     source: 'Team-Alpha server',

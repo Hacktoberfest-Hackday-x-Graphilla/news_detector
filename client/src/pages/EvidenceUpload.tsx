@@ -14,6 +14,7 @@ import {
   Download,
   Save,
 } from "lucide-react";
+import { getApiErrorMessage } from "../utils/api";
 import { buildExplanation, getConfidenceBreakdown } from "../utils/confidence";
 
 const navItems = [
@@ -95,6 +96,9 @@ export default function EvidenceAnalysis() {
         method: "POST",
         body: formData,
       });
+      if (!res.ok) {
+        throw new Error(await getApiErrorMessage(res));
+      }
 
       const reader = res.body?.getReader();
       if (!reader) throw new Error("No response body");

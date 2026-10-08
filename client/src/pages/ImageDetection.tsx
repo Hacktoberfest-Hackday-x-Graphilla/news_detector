@@ -5,6 +5,7 @@ import {
   XCircle,
   Image,
 } from "lucide-react";
+import { getApiErrorMessage } from "../utils/api";
 import { buildExplanation, getConfidenceBreakdown } from "../utils/confidence";
 import logo from "../assets/logo.png";
 
@@ -56,6 +57,9 @@ export default function ImageDetection() {
 
     try {
       const res = await fetch("/api/detect", { method: "POST", body: formData });
+      if (!res.ok) {
+        throw new Error(await getApiErrorMessage(res));
+      }
       const reader = res.body?.getReader();
       if (!reader) throw new Error("No response body");
 

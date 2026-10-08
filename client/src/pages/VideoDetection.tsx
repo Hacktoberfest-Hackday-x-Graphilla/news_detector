@@ -140,7 +140,7 @@ export default function VideoDetection() {
           Video Deepfake Detection
         </h1>
         <p className="text-gray-500 text-sm text-center max-w-lg mb-12">
-          Upload a video to detect AI-generated content, deepfakes, and manipulations using Hive AI.
+          Upload a video to detect AI-generated content, deepfakes, and manipulations using Google Gemini.
         </p>
 
         <div className="w-full max-w-2xl">

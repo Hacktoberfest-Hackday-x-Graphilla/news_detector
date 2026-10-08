@@ -63,7 +63,7 @@ export default function PublicPortal() {
               Video Detection
             </h2>
             <p className="text-gray-400 text-sm leading-relaxed mb-6">
-              Upload videos for AI and deepfake detection using Hive AI.
+              Upload videos for AI and deepfake detection using Google Gemini.
               Analyzes per-frame with multi-frame aggregation. Supports MP4,
               WebM, AVI, MOV.
             </p>

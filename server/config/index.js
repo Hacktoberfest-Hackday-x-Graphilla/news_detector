@@ -37,11 +37,8 @@ export default {
     ],
     dest: "uploads/",
   },
-  sightEngine: {
-    apiUser: process.env.SIGHT_ENGINE_API_USER || "",
-    apiSecret: process.env.SIGHT_ENGINE_API_SECRET || "",
-  },
-  hive: {
-    apiKey: process.env.HIVE_API_KEY || "",
+  gemini: {
+    apiKey: process.env.GEMINI_API_KEY || "",
+    model: process.env.GEMINI_MODEL || "gemini-2.5-flash",
   },
 };

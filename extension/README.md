@@ -20,7 +20,7 @@ A Firefox extension that scans images while browsing to detect AI-generated cont
 
 - Firefox browser (version 48+)
 - Team-Alpha server running locally or remotely
-- Server credentials configured (SIGHT_ENGINE_API_USER/SECRET or HIVE_API_KEY)
+- Server credentials configured (`GEMINI_API_KEY`)
 
 ### Steps
 
@@ -60,7 +60,7 @@ A Firefox extension that scans images while browsing to detect AI-generated cont
 
 The popup shows:
 
-- **Analysis Source**: Which service analyzed the image (SightEngine or Hive AI)
+- **Analysis Source**: Google Gemini analysis
 - **Deepfake Score**: Percentage confidence (0% = safe, 100% = likely deepfake)
 - **Assessment**: Human-readable verdict
 - **Detailed Results**: Full JSON response from the server (click to expand)
@@ -83,10 +83,10 @@ Common configurations:
 
 ### Supported Analysis Services
 
-The extension works with both SightEngine and Hive AI:
+The extension uses Google Gemini for both supported media types:
 
-- **Images**: Can use either SightEngine or Hive AI
-- **Videos**: Requires Hive AI
+- **Images**: Analyzed with Gemini
+- **Videos**: Analyzed with Gemini
 - **Deepfakes**: Both services detect deepfakes
 
 ## Architecture
@@ -144,7 +144,7 @@ The extension works with both SightEngine and Hive AI:
 
 - Verify Team-Alpha server is running (`npm start` in server folder)
 - Check server is accessible at the configured URL
-- Verify server API credentials are set (SIGHT_ENGINE_API_USER/SECRET or HIVE_API_KEY)
+- Verify the server `GEMINI_API_KEY` is set
 - Check server logs for errors
 
 ### Analysis takes too long
@@ -202,7 +202,7 @@ Content-Type: application/json
 ### Response Format (NDJSON)
 
 ```
-{"type":"status","message":"Sending to SightEngine for image analysis..."}
+{"type":"status","message":"Sending to Gemini for image analysis..."}
 {"type":"status","message":"Analysis complete"}
 {"type":"result","data":{...analysis results...}}
 ```

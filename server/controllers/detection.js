@@ -1,19 +1,14 @@
 import { analyze } from "../services/orchestrator.js";
-import { inferType as sightInferType } from "../services/sightEngineService.js";
-import { inferType as hiveInferType } from "../services/hiveService.js";
+import { inferType } from "../services/geminiService.js";
 import { removeFile } from "../utils/fileUtils.js";
 
 function ndjson(res, obj) {
   res.write(JSON.stringify(obj) + "\n");
 }
 
-function inferType(filename) {
-  return sightInferType(filename) || hiveInferType(filename);
-}
-
 const SERVICE_NAMES = {
-  image: "SightEngine",
-  video: "Hive AI",
+  image: "Gemini",
+  video: "Gemini",
 };
 
 export async function detect(req, res, next) {

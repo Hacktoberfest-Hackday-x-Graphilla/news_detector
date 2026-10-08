@@ -49,7 +49,7 @@ Important server files:
 - `routes/detection.js` - Detection endpoint routing.
 - `controllers/detection.js` - Detection request handling.
 - `services/orchestrator.js` - Coordinates analysis flow.
-- `services/sightEngineService.js` - SightEngine integration.
+- `services/geminiService.js` - Google Gemini media analysis integration.
 
 ## Extension
 

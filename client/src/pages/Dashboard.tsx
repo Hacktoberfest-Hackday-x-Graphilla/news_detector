@@ -19,8 +19,8 @@ import {
 const navItems = [
   { icon: <LayoutDashboard size={18} />, label: "ड्यासबोर्ड", sub: "DASHBOARD", href: "/dashboard", active: true },
   { icon: <ScanLine size={18} />, label: "प्रमाण विश्लेषण", sub: "EVIDENCE ANALYSIS", href: "/evidence", active: false },
-  { icon: <Mic size={18} />, label: "FIR दर्ता", sub: "VOICE-TO-FIR", href: "/fir", active: false },
-  { icon: <ClipboardList size={18} />, label: "केस लग", sub: "CASE LOG", href: "/cases", active: false },
+  { icon: <Mic size={18} />, label: "FIR दर्ता", sub: "VOICE-TO-FIR", href: "/voice-to-fir", active: false },
+  { icon: <ClipboardList size={18} />, label: "केस लग", sub: "CASE LOG", href: "/case-log", active: false },
 ];
 
 const statCards = [
@@ -197,7 +197,7 @@ export default function Dashboard() {
                   {filtered.map((c) => (
                     <tr key={c.id} className="hover:bg-gray-50 transition-colors">
                       <td className="px-4 py-3">
-                        <a href="/cases" className="text-[#3B4FE0] font-semibold text-xs hover:underline">
+                        <a href="/case-log" className="text-[#3B4FE0] font-semibold text-xs hover:underline">
                           {c.id}
                         </a>
                       </td>

@@ -19,8 +19,8 @@ import { buildExplanation, getConfidenceBreakdown } from "../utils/confidence";
 const navItems = [
   { icon: <LayoutDashboard size={18} />, label: "ड्यासबोर्ड", sub: "DASHBOARD", href: "/dashboard", active: false },
   { icon: <ScanLine size={18} />, label: "प्रमाण विश्लेषण", sub: "EVIDENCE ANALYSIS", href: "/evidence", active: true },
-  { icon: <Mic size={18} />, label: "FIR दर्ता", sub: "VOICE-TO-FIR", href: "/fir", active: false },
-  { icon: <ClipboardList size={18} />, label: "केस लग", sub: "CASE LOG", href: "/cases", active: false },
+  { icon: <Mic size={18} />, label: "FIR दर्ता", sub: "VOICE-TO-FIR", href: "/voice-to-fir", active: false },
+  { icon: <ClipboardList size={18} />, label: "केस लग", sub: "CASE LOG", href: "/case-log", active: false },
 ];
 
 const checklistMap: Record<string, string[]> = {

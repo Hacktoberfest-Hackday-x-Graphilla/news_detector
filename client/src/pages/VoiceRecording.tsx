@@ -50,7 +50,7 @@ interface FirFormState {
 // -----------------------------------------------------------------------
 const NAV_ITEMS = [
   { label: "ड्यासबोर्ड", sub: "DASHBOARD", icon: LayoutGrid, to: "/dashboard" },
-  { label: "प्रमाण विश्लेषण", sub: "EVIDENCE ANALYSIS", icon: FileSearch, to: "/evidence-analysis" },
+  { label: "प्रमाण विश्लेषण", sub: "EVIDENCE ANALYSIS", icon: FileSearch, to: "/evidence" },
   { label: "FIR दर्ता", sub: "VOICE-TO-FIR", icon: Mic, to: "/voice-to-fir" },
   { label: "केस लग", sub: "CASE LOG", icon: History, to: "/case-log" },
 ];

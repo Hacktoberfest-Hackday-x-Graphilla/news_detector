@@ -50,16 +50,20 @@ export async function detect(req, res, next) {
     ndjson(res, { type: "result", data: result });
 
     res.end();
-
-    if (req.file) {
-      await removeFile(req.file.path);
-    }
   } catch (err) {
     if (res.headersSent) {
       ndjson(res, { type: "error", message: err.message });
       res.end();
     } else {
       next(err);
+    }
+  } finally {
+    if (req.file) {
+      try {
+        await removeFile(req.file.path);
+      } catch (err) {
+        console.error("Failed to remove uploaded media:", err);
+      }
     }
   }
 }

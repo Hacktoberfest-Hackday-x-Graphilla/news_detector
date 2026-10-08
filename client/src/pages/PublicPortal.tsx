@@ -33,6 +33,12 @@ const detectionModes = [
   },
 ];
 
+const projectHighlights = [
+  { label: "UI polish", value: "3 updates" },
+  { label: "Evidence flow", value: "Live" },
+  { label: "Case tracking", value: "Ready" },
+];
+
 export default function PublicPortal() {
   return (
     <div className="min-h-screen overflow-hidden bg-[#f7f8fb] text-[#17233d]">
@@ -100,6 +106,19 @@ export default function PublicPortal() {
               >
                 <Video size={16} aria-hidden="true" /> Check a video
               </Link>
+            </div>
+            <div className="mt-8 grid max-w-xl gap-3 sm:grid-cols-3">
+              {projectHighlights.map(({ label, value }) => (
+                <div
+                  key={label}
+                  className="rounded-2xl border border-slate-200 bg-white/80 px-3 py-2.5 shadow-sm"
+                >
+                  <p className="text-[10px] font-bold tracking-[0.2em] text-slate-400">
+                    {label}
+                  </p>
+                  <p className="mt-2 text-sm font-semibold text-[#17233d]">{value}</p>
+                </div>
+              ))}
             </div>
             <div className="mt-12 flex items-center gap-3 border-t border-slate-200 pt-6">
               <div className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-100 text-[#315be8]">

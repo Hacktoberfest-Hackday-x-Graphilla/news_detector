@@ -43,6 +43,11 @@ const alerts = [
   { level: "SYSTEM UPDATE", msg: "Grad-CAM visualization engine updated to v2.4. Improved heatmap precision.", time: "1h ago", high: false },
 ];
 
+const contributionPills = [
+  { label: "UI polish", value: "3 updates" },
+  { label: "Case flow", value: "Live" },
+];
+
 export default function Dashboard() {
   const [search, setSearch] = useState("");
 
@@ -125,6 +130,16 @@ export default function Dashboard() {
             <div>
               <h1 className="text-2xl font-bold text-[#1a2744]">ड्यासबोर्ड</h1>
               <p className="text-gray-400 text-sm">Dashboard Overview & Recent Investigations</p>
+              <div className="mt-3 flex items-center gap-2">
+                {contributionPills.map(({ label, value }) => (
+                  <span
+                    key={label}
+                    className="rounded-full border border-indigo-100 bg-indigo-50 px-2.5 py-1 text-[10px] font-semibold tracking-[0.16em] text-indigo-700"
+                  >
+                    {label}: {value}
+                  </span>
+                ))}
+              </div>
             </div>
             <div className="flex items-center gap-4">
               <div className="text-right">

@@ -1,0 +1,44 @@
+{
+  "manifest_version": 2,
+  "name": "satya",
+  "version": "1.0.0",
+  "description": "Scan images while browsing to detect AI-generated content and deepfakes",
+  "homepage_url": "https://github.com/Lumbini-Province-Police/Team-Alpha",
+  "developer": {
+    "name": "vimlinuz",
+    "url": "https://vimlinuz.is-a.dev/"
+  },
+
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "sayta@alpha",
+      "data_collection_permissions": {
+        "required": ["none"]
+      }
+    }
+  },
+
+  "permissions": ["activeTab", "<all_urls>"],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_end",
+      "all_frames": false
+    }
+  ],
+  "browser_action": {
+    "default_popup": "popup.html",
+    "default_title": "satya"
+  },
+  "icons": {
+    "16": "icons/logo.png",
+    "48": "icons/logo.png",
+    "96": "icons/logo.png"
+  },
+  "web_accessible_resources": ["icons/scan.svg"]
+}
